@@ -1,8 +1,12 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.views import generic
 
 from .models import Book, BookInstance, Author, Genre
 
 
+@login_required
 def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
@@ -23,3 +27,9 @@ def index(request):
             'num_libro_books': num_libro_books,
         }
     )
+
+class BookListView(LoginRequiredMixin, generic.ListView):
+    model = Book
+
+class BookDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Book
